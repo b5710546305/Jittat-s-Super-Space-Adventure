@@ -8,8 +8,16 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.ship );
 
         this.bullets = [];
-        for ( var i = 0; i < 10; i++ ) {
-            var bullet = new Bullet();
+        for ( var i = 0; i < 15; i++ ) {
+            var p = Math.random();
+            var bullet = null; 
+            if ( p <= 0.4) {
+                bullet = new Bullet();
+            } else if ( p <= 0.7 ) {
+                bullet = new FastBullet();
+            } else {
+                bullet = new WaveBullet();
+            }
             bullet.randomPosition();
             bullet.setPositionX( 100 - 150 * i );
             this.addChild( bullet );
