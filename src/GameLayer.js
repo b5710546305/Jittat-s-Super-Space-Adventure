@@ -13,6 +13,7 @@ var GameLayer = cc.LayerColor.extend({
         
         this.shipVy = 0;
 
+        //this is cruel
         this.increaseBulletsDelay = 0;
 
         this.addKeyboardHandlers();
