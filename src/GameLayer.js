@@ -31,6 +31,8 @@ var GameLayer = cc.LayerColor.extend({
         this.lifeLabel.setPosition( cc.p( 700, 550 ) );
         this.addChild( this.lifeLabel );
         
+        this.shipVy = 0;
+
         this.addKeyboardHandlers();
         this.scheduleUpdate();
         
@@ -61,25 +63,36 @@ var GameLayer = cc.LayerColor.extend({
                 bullet.randomPosition();
             }
         });
+        //update ship position
+         var y = this.ship.getPositionY();
+        this.ship.setPositionY( y+this.shipVy );
     },
     
     onKeyDown: function( keyCode, event ) {
+        var y = this.ship.getPositionY();
         if ( keyCode == cc.KEY.up ) {
-            var y = this.ship.getPositionY();
             if ( y < screenHeight - 10 ) {
-                y += 10;
-                this.ship.setPositionY( y );
+                this.shipVy = 10;  
+            } else {
+                this.shipVy = 0;
             }
         } else if ( keyCode == cc.KEY.down ) {
-            var y = this.ship.getPositionY();
             if ( y > 10 ) {
-                y -= 10;
-                this.ship.setPositionY( y );
+                this.shipVy = -10;
+            } else {
+                this.shipVy = 0;
             }
-        }
+        } 
     },
     
     onKeyUp: function( keyCode, event ) {
+        var y = this.ship.getPositionY();
+        if ( keyCode == cc.KEY.up ) {
+                this.shipVy = 0;
+            
+        } else if ( keyCode == cc.KEY.down ) {
+                this.shipVy = -0;
+        }
     },
     
     addKeyboardHandlers: function() {
