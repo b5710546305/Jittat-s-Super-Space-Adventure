@@ -7,11 +7,13 @@ var GameLayer = cc.LayerColor.extend({
         this.ship.setPosition( new cc.Point( 700, 300 ) );
         this.addChild( this.ship );
 
-        this.createBullet();
+        this.createBullets();
 
          this.setLife();
         
         this.shipVy = 0;
+
+        this.increaseBulletsDelay = 0;
 
         this.addKeyboardHandlers();
         this.scheduleUpdate();
@@ -24,14 +26,14 @@ var GameLayer = cc.LayerColor.extend({
         this.lifeLabel.setPosition( cc.p( 700, 550 ) );
         this.addChild( this.lifeLabel );
     },
-    createBullet : function(){
+    createBullets : function(){
          this.bullets = [];
-        for ( var i = 0; i < 10; i++ ) {
-            var p = Math.random();
+        for ( var i = 0; i < 12; i++ ) {
+            var possibility = Math.random();
             var bullet = null; 
-            if ( p <= 0.4) {
+            if ( possibility <= 0.4) {
                 bullet = new Bullet();
-            } else if ( p <= 0.7 ) {
+            } else if ( possibility <= 0.7 ) {
                 bullet = new FastBullet();
             } else {
                 bullet = new WaveBullet();
@@ -44,10 +46,40 @@ var GameLayer = cc.LayerColor.extend({
             this.bullets.push( bullet );
         }
     },
+    createEvenMoreBullets: function(){
+        this.increaseBulletsDelay++;
+        if(this.increaseBulletsDelay > 10000){
+            for ( var i = 0; i < 12; i++ ) {
+            var possibility = Math.random();
+            var bullet = null; 
+            if ( possibility <= 0.4) {
+                bullet = new Bullet();
+            } else if ( possibility <= 0.7 ) {
+                bullet = new FastBullet();
+            } else {
+                bullet = new WaveBullet();
+            }
+            bullet.randomPosition();
+            bullet.setPositionX( 100 - 150 * i );
+            this.addChild( bullet );
+            bullet.scheduleUpdate();
+
+            this.bullets.push( bullet );
+
+
+            this.increaseBulletsDelay = 0;
+         }
+
+    }
+        
+    },
 
     update: function( dt ) {
         var self = this;
         this.bulletHitInGame(self);
+
+        this.createEvenMoreBullets();
+
         //update ship position
          var y = this.ship.getPositionY();
         this.ship.setPositionY( y+this.shipVy );
