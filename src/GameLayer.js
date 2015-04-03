@@ -7,8 +7,26 @@ var GameLayer = cc.LayerColor.extend({
         this.ship.setPosition( new cc.Point( 700, 300 ) );
         this.addChild( this.ship );
 
-        this.bullets = [];
-        for ( var i = 0; i < 15; i++ ) {
+        this.createBullet();
+
+         this.setLife();
+        
+        this.shipVy = 0;
+
+        this.addKeyboardHandlers();
+        this.scheduleUpdate();
+        
+        return true;
+    },
+    setLife:function(){
+        this.life = 10;
+        this.lifeLabel = cc.LabelTTF.create( 10, 'Arial', 32 );
+        this.lifeLabel.setPosition( cc.p( 700, 550 ) );
+        this.addChild( this.lifeLabel );
+    },
+    createBullet : function(){
+         this.bullets = [];
+        for ( var i = 0; i < 10; i++ ) {
             var p = Math.random();
             var bullet = null; 
             if ( p <= 0.4) {
@@ -25,22 +43,33 @@ var GameLayer = cc.LayerColor.extend({
 
             this.bullets.push( bullet );
         }
-
-        this.life = 10;
-        this.lifeLabel = cc.LabelTTF.create( 10, 'Arial', 32 );
-        this.lifeLabel.setPosition( cc.p( 700, 550 ) );
-        this.addChild( this.lifeLabel );
-        
-        this.shipVy = 0;
-
-        this.addKeyboardHandlers();
-        this.scheduleUpdate();
-        
-        return true;
     },
 
     update: function( dt ) {
         var self = this;
+        this.bulletHitInGame(self);
+        //update ship position
+         var y = this.ship.getPositionY();
+        this.ship.setPositionY( y+this.shipVy );
+    },
+    
+    onKeyDown: function( keyCode, event ) {
+        var y = this.ship.getPositionY();
+        if ( keyCode == cc.KEY.up ) {
+            if ( y < screenHeight - 20 ) {
+                this.shipVy = 10;  
+            } else {
+                this.shipVy = 0;
+            }
+        } else if ( keyCode == cc.KEY.down ) {
+            if ( y > 20 ) {
+                this.shipVy = -10;
+            } else {
+                this.shipVy = 0;
+            }
+        } 
+    },
+    bulletHitInGame :function(self){
         this.bullets.forEach( function( bullet, i ) {
             var x = bullet.getPositionX();
             if ( ( x < screenWidth ) &&
@@ -63,28 +92,7 @@ var GameLayer = cc.LayerColor.extend({
                 bullet.randomPosition();
             }
         });
-        //update ship position
-         var y = this.ship.getPositionY();
-        this.ship.setPositionY( y+this.shipVy );
     },
-    
-    onKeyDown: function( keyCode, event ) {
-        var y = this.ship.getPositionY();
-        if ( keyCode == cc.KEY.up ) {
-            if ( y < screenHeight - 10 ) {
-                this.shipVy = 10;  
-            } else {
-                this.shipVy = 0;
-            }
-        } else if ( keyCode == cc.KEY.down ) {
-            if ( y > 10 ) {
-                this.shipVy = -10;
-            } else {
-                this.shipVy = 0;
-            }
-        } 
-    },
-    
     onKeyUp: function( keyCode, event ) {
         var y = this.ship.getPositionY();
         if ( keyCode == cc.KEY.up ) {

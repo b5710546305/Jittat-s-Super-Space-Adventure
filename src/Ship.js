@@ -3,4 +3,5 @@ var Ship = cc.Sprite.extend({
         this._super();
         this.initWithFile( 'res/images/ship.png' );
     }
+
 });

@@ -6,7 +6,7 @@ var FastBullet = cc.Sprite.extend({
 
     update: function( dt ) {
         var x = this.getPositionX();
-        x += 10;
+        x += (Math.random()*5)+5;
         this.setPositionX( x );
     },
 

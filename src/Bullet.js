@@ -6,7 +6,7 @@ var Bullet = cc.Sprite.extend({
 
     update: function( dt ) {
         var x = this.getPositionX();
-        x += 5;
+        x += Math.random()*5;
         this.setPositionX( x );
     },
 

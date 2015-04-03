@@ -10,7 +10,7 @@ var WaveBullet = cc.Sprite.extend({
         var pos = this.getPosition();
 
         this.step += 1;
-        this.setPosition( cc.p( pos.x + 5, pos.y + 4 * Math.sin( Math.PI * this.step / this.period ) ) );
+        this.setPosition( cc.p( pos.x + (Math.random()*5)+5, pos.y + 4 * Math.sin( Math.PI * this.step / this.period ) ) );
     },
 
     randomPosition: function() {
